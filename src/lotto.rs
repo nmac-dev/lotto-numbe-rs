@@ -157,8 +157,6 @@ pub fn create_tickets(rows: usize, ml: usize, mr: u64, sl: usize, sr: u64) -> St
     let mut rng    = Rng::new();
     let mut result = String::new();
 
-    let sp_series: Vec<u64> = rng.next_series(sl * rows, 1, sr, true);
-
     for i in 0..rows {
         let main_series: Vec<u64> = rng.next_series(ml, 1, mr, true);
 
@@ -168,12 +166,13 @@ pub fn create_tickets(rows: usize, ml: usize, mr: u64, sl: usize, sr: u64) -> St
             main_series,
         ));
         if sl > 0 {
+            let sp_series: Vec<u64> = rng.next_series(sl, 1, sr, true);
             result.push_str(&format!(
                 "\t::{:?}",
-                &sp_series[(i * sl)..((i + 1) * sl)]
-            ))
+                sp_series
+            ));
         }
-        result.push('\n')
+        result.push('\n');
     }
 
     result
